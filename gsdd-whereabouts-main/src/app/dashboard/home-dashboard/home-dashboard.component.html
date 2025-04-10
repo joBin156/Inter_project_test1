@@ -1,0 +1,23 @@
+<app-sidebar></app-sidebar>
+<div class="flex">
+  <div class="500 w-full md:sm:ml-64">
+    <div class="mt-10">
+      <p class="pb-3 pl-3.5 text-sm font-semibold md:text-lg lg:text-xl">
+        Dashboard
+      </p>
+    </div>
+    <div class="text-sm">
+      <p-tabView [(activeIndex)]="activeTabIndex">
+        <p-tabPanel header="Dashboard">
+          <app-dashboard></app-dashboard>
+        </p-tabPanel>
+        <p-tabPanel header="Timesheet">
+          <app-timesheet></app-timesheet>
+        </p-tabPanel>
+        <p-tabPanel header="Change pin">
+          <app-changepin></app-changepin>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>

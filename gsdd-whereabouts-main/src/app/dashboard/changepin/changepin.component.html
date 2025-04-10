@@ -1,0 +1,57 @@
+<div class="container">
+    <p-toast></p-toast>
+  <div>
+    <p class="font-semibold">Change pin</p>
+
+    <div
+      class="ml-5 mt-5 flex w-4/5 flex-col gap-5 rounded-lg border border-black p-5 shadow-lg md:w-96"
+    >
+      <form (ngSubmit)="changePin()">
+        <div>
+          <label
+            for="new_pin"
+            class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+            >New pin:</label
+          >
+          <input
+            pInputText
+            pKeyFilter="int"
+            maxlength="6"
+            type="password"
+            id="new_pin"
+            [formControl]="newPinControl"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            placeholder="New Pin"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            for="confirm_pin"
+            class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+            >Confirm pin:</label
+          >
+          <input
+            pInputText
+            pKeyFilter="int"
+            maxlength="6"
+            type="password"
+            id="confirm_pin"
+            [formControl]="confirmPinControl"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            placeholder="Confirm pin"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="rounded-lg mt-3 bg-black p-2 text-base text-white opacity-80 transition hover:opacity-100"
+        >
+          Confirm
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

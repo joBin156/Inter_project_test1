@@ -1,0 +1,180 @@
+<div class="container">
+  <!-- <div class="mb-10 text-xs md:text-sm">
+        <p class="font-medium">Select date:</p>
+        <p-calendar [(ngModel)]="date"></p-calendar>
+    </div> -->
+  <div class="lg:w-3/5">
+    <p-toast></p-toast>
+
+    <p-table
+      #dttimesheet
+      dataKey="Id"
+      [value]="timeInAndOutData"
+      editMode="row"
+      [globalFilterFields]="['time_in', 'time_out']"
+      [scrollable]="true"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 15, 30, 50, 100]"
+      [showCurrentPageReport]="true"
+      [(selection)]="selectedtimeInAndOutData"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [tableStyle]="{ 'min-width': '40rem' }"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 5%">Time In</th>
+          <th style="width: 5%">Time Out</th>
+          <th style="width: 20%"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="caption">
+        FORMAT: YYYY-MM-DD
+        Example search: 2024-05-27
+        <div class="flex gap-5">
+          <span class="flex w-full justify-end">
+            <input
+              class="w-full font-semibold sm:w-64"
+              pInputText
+              type="text"
+              (input)="applyFilterGlobal($event, 'contains')"
+              placeholder="Search date"
+            />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template
+        pTemplate="body"
+        let-account
+        let-editing="editing"
+        let-ri="rowIndex"
+      >
+        <tr [pEditableRow]="account">
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <!-- <input
+                  class="rounded-md"
+                  pInputText
+                  type="text"
+                  [(ngModel)]="account.time_in"
+                  required
+                /> -->
+                <input
+                type="time"
+                id="time"
+                name="time"
+                class="block w-full flex-1 rounded-none rounded-s-lg border border-gray-300 bg-gray-50 p-2.5 text-sm leading-none text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                min="09:00"
+                max="18:00"
+                [(ngModel)]="account.time_in_time_only"
+                required
+              />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ account.time_in_date_only }}  {{ account.time_in_time_only }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <!-- <input
+                  class="rounded-md"
+                  pInputText
+                  type="text"
+                  [(ngModel)]="account.time_out"
+                  required
+                /> -->
+                <input
+                type="time"
+                id="time"
+                name="time"
+                class="block w-full flex-1 rounded-none rounded-s-lg border border-gray-300 bg-gray-50 p-2.5 text-sm leading-none text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                min="09:00"
+                max="18:00"
+                [(ngModel)]="account.time_out_time_only"
+                required
+              />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ account.time_out_date_only }}  {{ account.time_out_time_only }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td>
+            <div class="align-items-center justify-content-center flex gap-2">
+              <button
+                *ngIf="!editing"
+                pButton
+                pRipple
+                type="button"
+                pInitEditableRow
+                icon="pi pi-pencil"
+                (click)="onRowEditInit(account)"
+                class="p-button-rounded p-button-text"
+              ></button>
+              <button
+                *ngIf="editing"
+                pButton
+                pRipple
+                type="button"
+                pSaveEditableRow
+                icon="pi pi-check"
+                (click)="onRowEditSave(account)"
+                class="p-button-rounded p-button-text p-button-success mr-2"
+              ></button>
+              <button
+                *ngIf="editing"
+                pButton
+                pRipple
+                type="button"
+                pCancelEditableRow
+                icon="pi pi-times"
+                class="p-button-rounded p-button-text p-button-danger"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- DIVIDER -->
+  <!-- <div class="flex flex-col gap-3 lg:w-3/5">
+    <div
+      *ngFor="let data of timeInAndOutData"
+      class="border-black-600 flex w-full rounded-lg border transition hover:border-zinc-700"
+    >
+      <div class="flex w-full text-sm md:text-lg">
+        <div class="flex w-10/12 pb-2 pt-2">
+          <div
+            class="flex flex-wrap items-center gap-3 border-r border-r-black pl-5 pr-5"
+          >
+            <p>Time in:</p>
+            <p>{{ data.time_in }}</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 pl-5 pr-5">
+            <p>Time out:</p>
+            <p>{{ data.time_out }}</p>
+          </div>
+        </div>
+
+        <div
+          class="item-center flex h-full w-28 justify-center pt-2 text-xs md:text-sm"
+        >
+          <p class="font-medium">April 2, 2024</p>
+        </div>
+      </div>
+
+      <div
+        class="flex w-16 items-center justify-center rounded-r-lg bg-red-500 text-xs text-white hover:bg-red-600 hover:text-white md:text-sm"
+      >
+        <a href="#">Edit</a>
+      </div>
+    </div>
+  </div> -->
+</div>

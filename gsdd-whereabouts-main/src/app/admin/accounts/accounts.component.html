@@ -1,0 +1,395 @@
+<app-sidebar></app-sidebar>
+<div class="flex overflow-hidden">
+  <div class="mt-20 w-full md:sm:ml-64">
+    <div class="mb-5 ml-5 text-xs font-semibold sm:text-sm lg:text-xl">
+      <p>Notification</p>
+    </div>
+    <div class="ml-5">
+      <button
+        (click)="showAddAccountDialog()"
+        class="m-2 rounded-lg bg-gray-700 p-2 text-xs text-white transition hover:bg-gray-900 sm:text-sm"
+      >
+        Add account
+      </button>
+      <p-dialog
+        header="Add account"
+        [(visible)]="addAccountVisibility"
+        [modal]="true"
+        [style]="{ width: '50vw' }"
+        [draggable]="false"
+        [resizable]="false"
+      >
+        <hr />
+
+        <div class="flex items-center justify-center overflow-hidden">
+          <form
+            [formGroup]="addAccountForm"
+            (submit)="submitAccount()"
+            class="flex w-full flex-col gap-5 p-8"
+          >
+            <div id="Name" class="flex justify-between gap-2">
+              <div class="w-3/6">
+                <label
+                  for="firstname"
+                  class="ng-invalid ng-dirty mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+                  >First Name:</label
+                >
+
+                <input
+                  pInputText
+                  formControlName="first_name"
+                  type="text"
+                  id="firstname"
+                  class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder="First Name"
+                  required
+                />
+
+                <div class="mt-1 text-xs text-red-500">
+                    <p *ngIf="addAccountForm.get('first_name')?.errors?.['required']">First name is required</p>
+                    <p *ngIf="addAccountForm.get('first_name')?.errors?.['pattern']">Enter a valid name</p>
+                </div>
+
+              </div>
+
+              <div class="w-3/6">
+                <label
+                  for="lastname"
+                  class="mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+                  >Last Name:</label
+                >
+
+                <input
+                  formControlName="last_name"
+                  type="text"
+                  id="lastname"
+                  class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder="Last Name"
+                  required
+                />
+
+                <div class="mt-1 text-xs text-red-500">
+                    <p *ngIf="addAccountForm.get('last_name')?.errors?.['required']">Last name is required</p>
+                    <p *ngIf="addAccountForm.get('last_name')?.errors?.['pattern']">Enter a valid name</p>
+                </div>
+
+              </div>
+            </div>
+
+            <div id="position">
+              <div id="position">
+                <label
+                  for="text"
+                  class="mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+                  >Position:</label
+                >
+                <p-dropdown
+                  id="position"
+                  [options]="positions"
+                  formControlName="position"
+                  optionLabel="label"
+                  placeholder="Select your Position"
+                ></p-dropdown>
+
+                <div class="mt-1 text-xs text-red-500">
+                    <p *ngIf="addAccountForm.value.position?.value === '' ">Select a position</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="email">
+              <label
+                for="email"
+                class="mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+                >Email:</label
+              >
+
+              <input
+                formControlName="email"
+                pInputText
+                type="email"
+                id="email"
+                class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder="Email"
+                required
+              />
+
+              <div class="mt-1 text-xs text-red-500">
+                <p *ngIf="addAccountForm.get('email')?.errors?.['required']">Email is required</p>
+                <!-- <p *ngIf="addAccountForm.get('email')?.errors?.['pattern']">Please enter a valid email with the domain @gmail.com and only use numbers and alphabets before the @ symbol.</p> -->
+
+                <!-- Enable this in production! -->
+                <p *ngIf="addAccountForm.get('email')?.errors?.['pattern']">Please enter a valid email with the domain @namria.gov.ph and only use numbers and alphabets before the @ symbol.</p>
+            </div>
+            </div>
+
+            <div class="flex justify-between gap-2">
+              <div id="pin" class="w-3/6">
+                <label
+                  for="pin"
+                  class="mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+                  >Pin</label
+                >
+
+                <input
+                  formControlName="pin"
+                  pInputText
+                  pKeyFilter="int"
+                  maxlength="6"
+                  type="password"
+                  id="pin"
+                  class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  placeholder="Enter 6-digit pin"
+                  required
+                />
+
+                <div class="mt-1 text-xs text-red-500">
+                  <p *ngIf="addAccountForm.get('pin')?.errors?.['required']">Pin is required.</p>
+                  <p *ngIf="addAccountForm.get('pin')?.errors?.['minlength']">Pin must be 6 digit.</p>
+ 
+                </div>
+              </div>
+
+              <div id="role" class="w-3/6">
+                <label
+                  for="role"
+                  class="mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+                  >Role</label
+                >
+
+                <p-dropdown
+                  id="role"
+                  [options]="roleOption"
+                  formControlName="role"
+                  optionLabel="label"
+                  placeholder="Select your Role"
+                ></p-dropdown>
+
+                <div class="mt-1 text-xs text-red-500">
+                    <p *ngIf="addAccountForm.value.role?.value === '' ">Select a role</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                pButton
+                pRipple
+                [disabled]="addAccountForm.invalid && (addAccountForm.value.position?.value !== '' && addAccountForm.value.role?.value !== '') "
+                class="bottom-0 w-2/5 rounded-lg bg-blue-700 px-10 py-2.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto md:text-sm"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </p-dialog>
+    </div>
+
+    <div
+      class="ml-5 flex w-full flex-col rounded-lg border border-black bg-white p-5 shadow-lg md:w-3/5 lg:w-11/12"
+    >
+      <p-toast></p-toast>
+      <!-- <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-danger"
+            (click)="deleteSelectedAccounts()"
+            [disabled]="!selectedAccounts || !selectedAccounts.length"
+          ></button>
+        </ng-template>
+      </p-toolbar> -->
+      <p-table
+        #dtaccounts
+        dataKey="Id"
+        [value]="account"
+        editMode="row"
+        [globalFilterFields]="[
+          'first_name',
+          'last_name',
+          'position',
+          'email',
+          'role',
+          'verified'
+        ]"
+        [scrollable]="true"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 15, 30, 50, 100]"
+        [showCurrentPageReport]="true"
+        [(selection)]="selectedAccounts"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <!-- <th style="width: 4rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th> -->
+            <th style="width: 20%">First Name</th>
+            <th style="width: 20%">Last Name</th>
+            <th style="width: 20%">Current Status</th>
+            <th style="width: 20%">Position</th>
+            <th style="width: 20%">Email</th>
+            <th style="width: 20%">Role</th>
+            <th style="width: 20%">Verified</th>
+            <th style="width: 20%"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="caption">
+          <div class="flex gap-5">
+            <button
+              pButton
+              label="Clear"
+              class="p-button-outlined"
+              icon="pi pi-filter-slash"
+              (click)="clear(dt)"
+            ></button>
+            <span class="flex w-full justify-end">
+              <input
+                class="w-full font-semibold sm:w-64"
+                pInputText
+                type="text"
+                (input)="applyFilterGlobal($event, 'contains')"
+                placeholder="Search name"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-account
+          let-editing="editing"
+          let-ri="rowIndex"
+        >
+          <tr [pEditableRow]="account">
+            <!-- <td>
+              <p-tableCheckbox [value]="account"></p-tableCheckbox>
+            </td> -->
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    class="rounded-md"
+                    pInputText
+                    type="text"
+                    [(ngModel)]="account.first_name"
+                    required
+                  />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ account.first_name }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    class="rounded-md"
+                    pInputText
+                    type="text"
+                    [(ngModel)]="account.last_name"
+                    required
+                  />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ account.last_name }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              {{ account.current_status }}
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    class="rounded-md"
+                    pInputText
+                    type="text"
+                    [(ngModel)]="account.position"
+                  />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ account.position }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              {{ account.email }}
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown
+                    [options]="roleOption"
+                    appendTo="body"
+                    [(ngModel)]="account.role"
+                    [style]="{ width: '100%' }"
+                  ></p-dropdown>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ account.role }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown
+                    [options]="verifyOption"
+                    appendTo="body"
+                    [(ngModel)]="account.verified"
+                    [style]="{ width: '100%' }"
+                  ></p-dropdown>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ account.verified }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <div class="align-items-center justify-content-center flex gap-2">
+                <button
+                  *ngIf="!editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pInitEditableRow
+                  icon="pi pi-pencil"
+                  (click)="onRowEditInit(account)"
+                  class="p-button-rounded p-button-text"
+                ></button>
+                <button
+                  *ngIf="editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pSaveEditableRow
+                  icon="pi pi-check"
+                  (click)="onRowEditSave(account)"
+                  class="p-button-rounded p-button-text p-button-success mr-2"
+                ></button>
+                <button
+                  *ngIf="editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pCancelEditableRow
+                  icon="pi pi-times"
+                  (click)="onRowEditCancel(account, ri)"
+                  class="p-button-rounded p-button-text p-button-danger"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+    </div>
+  </div>
+</div>

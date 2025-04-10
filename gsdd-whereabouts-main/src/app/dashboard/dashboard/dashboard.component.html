@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="flex flex-wrap gap-10">
+    <div
+      class="sm:h-30 md:h-46 h-32 w-32 rounded-xl border border-black shadow-md sm:w-36 md:w-56 lg:h-48 lg:w-60"
+    >
+      <div class="m-5 flex flex-col">
+        <p
+          class="sm:text text-base font-light opacity-50 md:text-2xl lg:text-3xl"
+        >
+          Total time today
+        </p>
+        <div class="mt-3 sm:mt-0">
+          <p class="text-lg font-bold md:mt-3 md:text-2xl lg:mt-5 lg:text-3xl">
+            Not configured
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="sm:h-30 md:h-46 h-32 w-32 rounded-xl border border-black shadow-md sm:w-36 md:w-56 lg:h-48 lg:w-60"
+    >
+      <div class="m-5 flex flex-col">
+        <p
+          class="sm:text text-base font-light opacity-50 md:text-2xl lg:text-3xl"
+        >
+          Frequent status
+        </p>
+        <div class="mt-3 sm:mt-0">
+          <p class="text-lg font-bold md:mt-3 md:text-2xl lg:mt-5 lg:text-3xl">
+            Not configured
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="sm:h-30 md:h-46 h-32 w-32 rounded-xl border border-black shadow-md sm:w-36 md:w-56 lg:h-48 lg:w-60"
+    >
+      <div class="m-5 flex flex-col">
+        <p
+          class="sm:text text-base font-light opacity-50 md:text-2xl lg:text-3xl"
+        >
+          Longest streak
+        </p>
+        <div class="mt-3 sm:mt-0">
+          <p class="text-lg font-bold md:mt-3 md:text-2xl lg:mt-5 lg:text-3xl">
+            Not configured
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- table -->
+  <div class="mt-5 w-10/12 rounded-xl border border-black p-5 shadow-lg">
+    TABLE IS NOT CONFIGURED
+    <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+  </div>
+
+  <div class="mt-5 flex w-10/12 flex-row-reverse">
+    NOT CONFIGURED
+    <button
+      class="flex-end rounded-lg bg-gray-500 p-2 text-xs text-white sm:text-sm md:text-lg lg:text-xl"
+    >
+      Generate Excel Timesheet
+    </button>
+  </div>
+</div>

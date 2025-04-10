@@ -1,0 +1,48 @@
+<app-sidebar></app-sidebar>
+<div class="flex">
+  <div class="500 mt-20 w-full md:sm:ml-64">
+    <div class="ml-5 text-xs font-semibold sm:text-sm lg:text-xl">
+      <p>Rules</p>
+    </div>
+    NOT CONFIGURED
+    <div
+      class="ml-10 w-72 rounded-lg border border-black bg-white shadow-lg md:w-96 lg:w-2/6"
+    >
+      <div class="m-5 flex flex-col gap-5">
+        <div class="text-sm font-semibold md:text-lg">
+          <p>Log in time:</p>
+
+          <div class="card">
+            <p-dropdown
+              [options]="timeRule"
+              [(ngModel)]="selectedTimeRule"
+              optionLabel="time"
+              [showClear]="true"
+              placeholder="Select Time"
+            ></p-dropdown>
+          </div>
+        </div>
+
+        <div class="text-sm font-semibold md:text-lg">
+          <p>Pause tracking:</p>
+
+          <div class="card">
+            <p-dropdown
+              [options]="pauseTracking"
+              [(ngModel)]="selectedPauseTracking"
+              [showClear]="true"
+              placeholder="Select condition"
+            ></p-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="mb-5 mr-5 flex justify-end">
+        <button
+          class="rounded-lg bg-gray-700 p-2 text-xs text-white transition hover:bg-gray-950 sm:text-sm md:text-lg"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

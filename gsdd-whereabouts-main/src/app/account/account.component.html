@@ -1,0 +1,136 @@
+<app-sidebar></app-sidebar>
+<div class="flex">
+  <div class="500 w-full md:sm:ml-64">
+    <div
+      class="ml-5 mt-20 flex w-3/5 flex-col rounded-lg border border-black p-5 shadow-lg lg:w-2/5"
+    >
+      <p class="text-xs font-semibold sm:text-base lg:text-xl">Account</p>
+
+      <div
+        class="align-center mt-10 flex flex-wrap justify-center sm:justify-start"
+      >
+        <div class="flex flex-col p-2">
+          <div class="flex flex-col sm:flex-row">
+            <div class="flex items-center justify-center">
+              <div
+                class="m-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-dashed border-blue-950 bg-gray-100 dark:bg-gray-600 sm:h-20 sm:w-20"
+              >
+                <span
+                  class="text-xs font-medium text-gray-600 dark:text-gray-300 sm:text-base lg:text-3xl"
+                  >KR</span
+                >
+              </div>
+            </div>
+            <div class="flex items-center">
+              <button
+                data-modal-target="change-picture-modal"
+                data-modal-toggle="change-picture-modal"
+                class="rounded-lg text-center text-xs font-medium text-blue-400 hover:text-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 sm:text-sm"
+                type="button"
+              >
+                Edit profile image (NOT CONFIGURED)
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="mt-5 flex flex-col text-sm sm:text-lg lg:flex-row lg:gap-8"
+          >
+            <div class="hidden gap-3 font-medium lg:flex lg:flex-col">
+              <p>Name:</p>
+              <p>Email:</p>
+              <p>Role:</p>
+              <p>Position:</p>
+            </div>
+
+            <div class="flex flex-col gap-3 font-medium">
+              <p>{{ User.first_name }} {{ User.last_name }}</p>
+              <p>{{ User.email }}</p>
+              <p>{{ User.role }}</p>
+              <p>{{ User.position }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div
+  id="change-picture-modal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0"
+>
+  <div class="relative max-h-full w-full max-w-2xl p-4">
+    <!-- Modal content -->
+    <div class="relative rounded-lg bg-white shadow dark:bg-gray-700">
+      <!-- Modal header -->
+      <div
+        class="flex items-center justify-between rounded-t border-b p-4 dark:border-gray-600 md:p-5"
+      >
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          Upload your picture
+        </h3>
+        <button
+          type="button"
+          class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-hide="change-picture-modal"
+        >
+          <svg
+            class="h-3 w-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 14"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+            />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="space-y-4 p-4 md:p-5">
+        <label
+          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+          for="small_size"
+          >Accepted formats: .jpg, .png, .webp</label
+        >
+        <input
+          class="mb-5 block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-xs text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
+          id="small_size"
+          type="file"
+        />
+      </div>
+      <!-- Modal footer -->
+      <div
+        class="flex items-center rounded-b border-t border-gray-200 p-4 dark:border-gray-600 md:p-5"
+      >
+        <button
+          data-modal-hide="change-picture-modal"
+          type="button"
+          class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Save
+        </button>
+        <button
+          data-modal-hide="change-picture-modal"
+          type="button"
+          class="ms-3 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END OF MODAL -->

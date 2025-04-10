@@ -1,0 +1,21 @@
+<app-sidebar></app-sidebar>
+<div class="flex">
+  <div class="500 w-full md:sm:ml-64">
+    <div class="mt-10">
+      <p class="pb-3 pl-3.5 text-sm font-semibold md:text-lg lg:text-xl">
+        Reports
+      </p>
+    </div>
+    <div class="text-sm">
+      <p-tabView>
+        <p-tabPanel header="Monthly Attendance">
+          <app-monthly-attendance></app-monthly-attendance>
+          <!-- <app-team-member-status></app-team-member-status> -->
+        </p-tabPanel>
+        <p-tabPanel header="Team member status">
+          <app-team-member-status></app-team-member-status>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>

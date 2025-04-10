@@ -1,0 +1,268 @@
+
+<p-toast></p-toast>
+<div class="flex">
+    <div class="w-full">
+        <div id="org-chart" class="">
+            <div class="flex flex-col h-screen w-full">
+                <div id="it-3" class="m-2 flex pt-5 justify-center">
+                    <div id="avatar" class="flex flex-col items-center gap-2">
+                        <div class="card justify-content-center flex flex-col text-xs">
+                            <app-user-button [user]="{first_name: 'First Name', last_name: 'Last Name', position: 'IT Officer III', initials: 'VC', status: getStatus('First Name', 'Last Name'), borderColor: isTimeIn('First Name', 'Last Name') ? 'border-red-400' : 'border-gray-500'}" [statusData]="statusData"></app-user-button>
+                        </div>
+                    </div>
+                </div>
+                <div id="admin-aide" class="m-2 flex">
+                    <div class="w-1/2"></div>
+                    <div class="w-1/2">
+                        <div class="w-full">
+                            <div class="w-2/2 flex">
+                                <div class="w-1/2 flex items-center">
+                                    <div class="border-b border-black border-dashed w-full"></div>
+                                </div>
+
+                                <div class="w-1/2 p-2   ">
+                                    <div>Administrative Aide VI</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="lower-org-chart" class="m-2 flex justify-center">
+                    <div id="1" class="flex w-full gap-5 flex-col items-center">
+                        <div id="fatima-santos">
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <app-user-button [user]="{first_name: 'Fatima', last_name: 'Santos', position: 'IT Officer II', initials: 'FS', status: getStatus('Fatima', 'Santos'), borderColor: isTimeIn('Fatima', 'Santos') ? 'border-green-400' : 'border-gray-500'}"></app-user-button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="melvin-perez">
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <app-user-button [user]="{first_name: 'Melvin', last_name: 'Perez', position: 'IS Analyst III', initials: 'MP', status: getStatus('Melvin', 'Perez'), borderColor: isTimeIn('Melvin', 'Perez') ? 'border-yellow-400' : 'border-gray-500'}"></app-user-button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="homer-macawili">
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <app-user-button [user]="{first_name: 'Homer Paulo', last_name: 'Macawili', position: 'IS Analyst II', initials: 'HM', status: getStatus('Homer Paulo', 'Macawili'), borderColor: isTimeIn('Homer Paulo', 'Macawili') ? 'border-blue-400' : 'border-gray-500'}"></app-user-button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="4-avatar" class="flex gap-5 justify-center w-full flex-wrap">
+                            <div id="lyra-samarista">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'Lyra Anne', last_name: 'Samarista', position: 'IS Researcher II', initials: 'LS', status: getStatus('Lyra Anne', 'Samarista'),borderColor: isTimeIn('Lyra Anne', 'Samarista') ? 'border-green-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="fely-espinas">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'Fely', last_name: 'Espinas', position: 'IS Researcher II', initials: 'FE', status: getStatus('Fely', 'Espinas'), borderColor: isTimeIn('Fely', 'Espinas') ? 'border-yellow-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="2" class="flex w-full gap-4 flex-col items-center border-r border-l border-dashed border-black">
+                        <div id="donald-gutierrez">
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <app-user-button [user]="{first_name: 'Donald', last_name: 'Gutierrez', position: 'IT Officer II', initials: 'DG', status: getStatus('Donald', 'Gutierrez'), borderColor: isTimeIn('Donald', 'Gutierrez') ? 'border-blue-400' : 'border-gray-500' }"></app-user-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="gerado-tanabe">
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <app-user-button [user]="{first_name: 'Gerado', last_name: 'Tanabe', position: 'IS Analyst III', initials: 'GT', status: getStatus('Gerado', 'Tanabe'), borderColor: isTimeIn('Gerado', 'Tanabe') ? 'border-yellow-400' : 'border-gray-500'}"></app-user-button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="4-avatar" class="flex gap-5 justify-center w-full flex-wrap">
+                            <div id="norman-boydon">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'Norman', last_name: 'Boydon', position: 'IS Analyst II', initials: 'NB', status: getStatus('Norman', 'Boydon'), borderColor: isTimeIn('Norman', 'Boydon') ? 'border-blue-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="michelle-medina">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'Michelle', last_name: 'Medina', position: 'IS Analyst II', initials: 'MM', status: getStatus('Michelle', 'Medina'), borderColor: isTimeIn('Michelle', 'Medina') ? 'border-blue-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="mark-jumeras">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'Mark Allan Jay', last_name: 'Jumeras', position: 'IS Analyst II', initials: 'MJ', status: getStatus('Mark Allan Jay', 'Jumeras'), borderColor: isTimeIn('Mark Allan Jay', 'Jumeras') ? 'border-blue-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="john-gorospe">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'John Francis', last_name: 'Gorospe', position: 'IS Analyst II', initials: 'FG', status: getStatus('John Francis', 'Gorospe'), borderColor: isTimeIn('John Francis', 'Gorospe') ? 'border-blue-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="3" class="flex w-full gap-5 flex-col items-center">
+                        <div id="romel-francisco">
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <app-user-button [user]="{first_name: 'Romel', last_name: 'Francisco', position: 'IT Officer II', initials: 'RF', status: getStatus('Romel', 'Francisco'), borderColor: isTimeIn('Romel', 'Francisco') ? 'border-yellow-400' : 'border-gray-500'}"></app-user-button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="4-avatar" class="flex gap-5 justify-center w-full flex-wrap">
+                            <div id="jaypee-delmundo">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'Jaypee', last_name: 'Del Mundo', position: 'CP III', initials: 'JD', status: getStatus('Jaypee', 'Del Mundo'), borderColor: isTimeIn('Jaypee', 'Del Mundo') ? 'border-yellow-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="sherwin-aquino">
+                                <div id="avatar" class="flex flex-col items-center gap-2">
+                                    <div class="card justify-content-center flex flex-col text-xs">
+                                        <app-user-button [user]="{first_name: 'Sherwin', last_name: 'Aquino', position: 'CP III', initials: 'SQ', status: getStatus('Sherwin', 'Aquino'), borderColor: isTimeIn('Sherwin', 'Aquino') ? 'border-yellow-400' : 'border-gray-500'}"></app-user-button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <app-user-button [user]="{first_name: 'Vacant', last_name: '', position: 'CP II', initials: 'VC', status: getStatus('First Name', 'Last Name'), borderColor: 'border-gray-400'}"></app-user-button>
+
+                                </div>
+                            </div>
+                            <div id="avatar" class="flex flex-col items-center gap-2">
+                                <div class="card justify-content-center flex flex-col text-xs">
+                                    <button (click)="showDialog()"
+                                        class="rounded-lg border border-black bg-white px-4 py-2 text-xs shadow-lg hover:bg-gray-200">
+                                        <div
+                                            class="border-grey-500 relative mb-2 inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-4 bg-gray-100 dark:bg-gray-600">
+                                            <span
+                                                class="text-xs font-medium text-gray-600 dark:text-gray-300">VC</span>
+                                        </div>
+                                        <p>Vacant</p>
+                                        <p>CP II</p>
+                                    </button>
+
+                                    <p-dialog [(visible)]="visible">
+                                        <ng-template pTemplate="headless">
+                                            <div class="flex-column flex gap-4 px-8 py-5">
+                                                <div class="gap-5">
+                                                    <label for="password"
+                                                        class="text-primary-50 font-semibold">Pin</label>
+                                                    <input pInputText id="password"
+                                                        class="bg-white-alpha-20 text-primary-50 rounded-lg p-3"
+                                                        type="password" placeholder="Enter 6-digit pin" />
+                                                </div>
+                                                <div class="align-items-center flex gap-2">
+                                                    <p-button label="Clock in" (click)="closeDialog()"
+                                                        styleClass="w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"
+                                                        class="w-full"></p-button>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </p-dialog>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="legend" class="m-2 flex w-1/6 flex-col">
+        <div class="pt-20 text-xl font-semibold">
+            <p>Geospatial Systems Development Division</p>
+        </div>
+
+        <div id="summary" class="mt-10 flex flex-col gap-2">
+            <div class="rounded-lg border border-black bg-white p-2 shadow-lg">
+                <p class="text-xs font-normal">In Office</p>
+                <p class="text-md font-semibold">Not configured</p>
+            </div>
+
+            <div class="rounded-lg border border-black bg-white p-2 shadow-lg">
+                <p class="text-xs font-normal">Sick leave</p>
+                <p class="text-md font-semibold">Not configured</p>
+            </div>
+
+            <div class="rounded-lg border border-black bg-white p-2 shadow-lg">
+                <p class="text-xs font-normal">Vacation leave</p>
+                <p class="text-md font-semibold">Not configured</p>
+            </div>
+
+            <div class="rounded-lg border border-black bg-white p-2 shadow-lg">
+                <p class="text-xs font-normal">No time in</p>
+                <p class="text-md font-semibold">Not configured</p>
+            </div>
+
+            <button (click)="csFlowShow()"
+                class="rounded-lg border border-black bg-white px-4 py-2 text-xs shadow-lg hover:bg-gray-200">
+                <p class="text-lg font-bold">Client Service Flow</p>
+            </button>
+
+            <p-dialog [(visible)]="csFlow">
+                <ng-template pTemplate="headless">
+                    <div class="flex-column flex gap-4 px-8 py-5">
+                        <img src="assets/org-chart/client_service_flow.JPG"  width="1600" alt="">
+                    </div>
+                </ng-template>
+            </p-dialog>
+
+
+        </div>
+        <div class="flex h-full flex-col justify-end pt-20 text-xl font-semibold">
+            <div class="m-1 flex gap-1 text-xs">
+                <div class="flex items-center">
+                    <div class="h-3 w-3 border-black bg-green-400"></div>
+                </div>
+
+                <p>System Research & Analysis Section</p>
+            </div>
+
+            <div class="m-1 flex gap-1 text-xs">
+                <div class="flex items-center">
+                    <div class="h-3 w-3 border-black bg-blue-400"></div>
+                </div>
+                <p>System Design Section</p>
+            </div>
+
+            <div class="m-1 flex gap-1 text-xs">
+                <div class="flex items-center">
+                    <div class="h-3 w-3 border-black bg-yellow-400"></div>
+                </div>
+                <p>Application Development and Maintenance Section</p>
+            </div>
+            <div class="text-xs mt-2">
+                <p>*B&W means the user is still not time in</p>
+                <p>*If can't login, refresh the browser. This is a known bug</p></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="container mx-auto">
+  <p-toast class="text-xs"></p-toast>
+  <div class="flex flex-col items-center justify-center">
+    <form
+      class="mt-10 flex w-96 flex-col gap-5 border p-8"
+      (ngSubmit)="login()"
+    >
+      <div class="flex items-center justify-center">
+        <p class="text-xs font-semibold md:text-sm">Login</p>
+      </div>
+
+      <div>
+        <label
+          for="email"
+          class="mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+          >Email</label
+        >
+
+        <input
+          type="email"
+          id="email"
+          class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          placeholder="Email"
+          [formControl]="emailControl"
+          required
+        />
+      </div>
+
+      <div>
+        <label
+          for="pin"
+          class="mb-2 block text-xs font-medium text-gray-900 dark:text-white md:text-sm"
+          >Pin</label
+        >
+
+        <input
+          pInputText
+          pKeyFilter="int"
+          maxlength="6"
+          type="password"
+          id="pin"
+          class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          placeholder="Enter 6-digit pin"
+          [formControl]="pinControl"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="bottom-0 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-xs font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto md:text-sm"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
