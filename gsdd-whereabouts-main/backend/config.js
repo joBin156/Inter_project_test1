@@ -2,10 +2,10 @@ require("dotenv").config();
 
 module.exports = {
   database: {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB,
-    server: process.env.DB_SERVER,
+    user: process.env.DB_USER || "New" ,
+    password: process.env.DB_PASSWORD || "11241999",
+    database: process.env.DB || "gsdd_personnel_tracking",
+    server: process.env.DB_SERVER || "localhost",
     options: {
       trustServerCertificate: true,
     },

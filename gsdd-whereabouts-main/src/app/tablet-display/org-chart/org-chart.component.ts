@@ -8,6 +8,7 @@ import { TimeInOutService } from 'src/service/time-in-out.service';
     selector: 'app-org-chart',
     templateUrl: './org-chart.component.html',
     styleUrls: ['./org-chart.component.css'],
+    standalone: false
 })
 export class OrgChartComponent implements OnInit {
 

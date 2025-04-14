@@ -4,9 +4,10 @@ import { MessageService } from 'primeng/api';
 import { AccountService } from 'src/service/employee-account.service';
 
 @Component({
-  selector: 'app-changepin',
-  templateUrl: './changepin.component.html',
-  styleUrls: ['./changepin.component.css'],
+    selector: 'app-changepin',
+    templateUrl: './changepin.component.html',
+    styleUrls: ['./changepin.component.css'],
+    standalone: false
 })
 export class ChangepinComponent {
     newPinControl = new FormControl('');

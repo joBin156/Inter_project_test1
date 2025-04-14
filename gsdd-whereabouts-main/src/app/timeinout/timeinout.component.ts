@@ -4,9 +4,10 @@ import { TabService } from 'src/service/tab.service';
 import { TimeInOutModalService } from 'src/service/time-in-out-modal.service';
 import { TimeInOutService } from 'src/service/time-in-out.service';
 @Component({
-  selector: 'app-timeinout',
-  templateUrl: './timeinout.component.html',
-  styleUrls: ['./timeinout.component.css'],
+    selector: 'app-timeinout',
+    templateUrl: './timeinout.component.html',
+    styleUrls: ['./timeinout.component.css'],
+    standalone: false
 })
 export class TimeinoutComponent implements OnInit {
   CURRENT_TIME_DISPLAY_ONLY?: string;

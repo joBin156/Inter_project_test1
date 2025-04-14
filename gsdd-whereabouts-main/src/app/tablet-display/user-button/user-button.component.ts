@@ -9,6 +9,7 @@ import { TimeInOutService } from 'src/service/time-in-out.service';
     selector: 'app-user-button',
     templateUrl: './user-button.component.html',
     styleUrls: ['./user-button.component.css'],
+    standalone: false
 })
 export class UserButtonComponent implements OnInit {
 

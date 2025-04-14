@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
     selector: 'app-monthly-attendance',
     templateUrl: './monthly-attendance.component.html',
     styleUrls: ['./monthly-attendance.component.css'],
+    standalone: false
 })
 export class MonthlyAttendanceComponent implements OnInit {
     @ViewChild('dt') dt!: Table;

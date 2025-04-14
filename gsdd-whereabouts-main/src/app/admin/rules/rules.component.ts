@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Time } from 'src/domain/admin-rules';
 
 @Component({
-  selector: 'app-rules',
-  templateUrl: './rules.component.html',
-  styleUrls: ['./rules.component.css'],
+    selector: 'app-rules',
+    templateUrl: './rules.component.html',
+    styleUrls: ['./rules.component.css'],
+    standalone: false
 })
 export class RulesComponent implements OnInit {
   timeRule!: Time[];

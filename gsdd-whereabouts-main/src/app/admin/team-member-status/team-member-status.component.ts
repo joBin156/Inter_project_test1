@@ -7,9 +7,10 @@ import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import * as FileSaver from 'file-saver';
 
 @Component({
-  selector: 'app-team-member-status',
-  templateUrl: './team-member-status.component.html',
-  styleUrls: ['./team-member-status.component.css'],
+    selector: 'app-team-member-status',
+    templateUrl: './team-member-status.component.html',
+    styleUrls: ['./team-member-status.component.css'],
+    standalone: false
 })
 export class TeamMemberStatusComponent implements OnInit {
   @ViewChild('dtstatus') dt!: Table;

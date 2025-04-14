@@ -6,6 +6,7 @@ import { StatusService } from 'src/service/status.service';
     selector: 'app-team',
     templateUrl: './team.component.html',
     styleUrls: ['./team.component.css'],
+    standalone: false
 })
 export class TeamComponent {
     currentDate = new Date();

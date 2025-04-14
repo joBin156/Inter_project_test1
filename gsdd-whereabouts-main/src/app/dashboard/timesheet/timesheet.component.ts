@@ -8,6 +8,7 @@ import { TimeInAndOutData } from 'src/domain/timesheet';
     selector: 'app-timesheet',
     templateUrl: './timesheet.component.html',
     styleUrls: ['./timesheet.component.css'],
+    standalone: false
 })
 export class TimesheetComponent {
     @ViewChild('dttimesheet') dt!: Table;

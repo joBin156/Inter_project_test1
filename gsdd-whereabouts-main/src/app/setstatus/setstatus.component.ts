@@ -6,9 +6,10 @@ import { StatusService } from 'src/service/status.service';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-setstatus',
-  templateUrl: './setstatus.component.html',
-  styleUrls: ['./setstatus.component.css'],
+    selector: 'app-setstatus',
+    templateUrl: './setstatus.component.html',
+    styleUrls: ['./setstatus.component.css'],
+    standalone: false
 })
 export class SetstatusComponent implements OnInit {
     private baseUrlAPI = `${environment.WSSUrl}`;

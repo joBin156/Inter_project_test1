@@ -2,9 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TabService } from 'src/service/tab.service';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-home-dashboard',
-  templateUrl: './home-dashboard.component.html',
-  styleUrls: ['./home-dashboard.component.css'],
+    selector: 'app-home-dashboard',
+    templateUrl: './home-dashboard.component.html',
+    styleUrls: ['./home-dashboard.component.css'],
+    standalone: false
 })
 export class HomeDashboardComponent implements OnInit, OnDestroy {
   constructor(private tabService: TabService) {}
