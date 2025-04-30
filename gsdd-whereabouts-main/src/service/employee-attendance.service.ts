@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { TimeInOutService } from './time-in-out.service';
 import { environment } from 'src/environments/environment';
 import { firstValueFrom, Observable } from 'rxjs';
@@ -8,7 +8,12 @@ import { HttpClient } from '@angular/common/http';
 export class EmployeeAttendanceService {
     private baseUrlAPI = `${environment.apiUrl}`;
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        @Inject(EmployeeAttendanceService) 
+        private employeeAttendance: EmployeeAttendanceService,
+        private http: HttpClient
+    ) {}
+
     
     // Hard code data
     // getEmployeeAttendanceData() {
