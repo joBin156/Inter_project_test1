@@ -2,7 +2,9 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TabService } from 'src/service/tab.service';
 import { TimeInOutModalService } from 'src/service/time-in-out-modal.service';
-import { TimeInOutService } from 'src/service/time-in-out.service';
+import { TimeInOutService, } from 'src/service/time-in-out.service';
+import { HttpClient } from '@angular/common/http';
+
 @Component({
     selector: 'app-timeinout',
     templateUrl: './timeinout.component.html',
@@ -30,6 +32,7 @@ export class TimeinoutComponent implements OnInit {
     private timeInOutModalService: TimeInOutModalService,
     private timeInOutService: TimeInOutService,
     private cdr: ChangeDetectorRef,
+    private http: HttpClient,
   ) {
     setInterval(() => {
       this.CURRENT_TIME_DISPLAY_ONLY = new Date().toLocaleString('en-US', {

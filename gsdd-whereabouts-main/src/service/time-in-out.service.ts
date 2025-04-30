@@ -3,6 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+export interface TimeInandOutData {
+  Id: string;
+  time_in: string | null;
+  time_out: string | null;
+}
+
+export interface AllowedTime {
+  startTime: string;
+  endTime: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -29,6 +40,16 @@ export class TimeInOutService {
     return this.http.put(`${this.baseUrlAPI}set_total_time/${time_out_Id}`, {
       total_time,
     });
+  }
+
+  getAllowedTime(): Observable<any> {
+    console.log('Making API request to:', `${this.baseUrlAPI}allowed-time`);
+    return this.http.get(`${this.baseUrlAPI}allowed-time`);
+  }
+
+  setAllowedTime(AllowedTime: string): Observable<any> {
+    //const payload = { allowed_Time; AllowedTime };
+    return this.http.put(`${this.baseUrlAPI}allowed-time/${AllowedTime}`, {})
   }
 
   isTimeIn(user_Id: string | null): Observable<any> {
