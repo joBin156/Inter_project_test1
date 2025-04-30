@@ -25,7 +25,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private timeInOutService: TimeInOutService,
-    private employeeAttendanceService: EmployeeAttendanceService
+    private employeeAttendanceService: EmployeeAttendanceService,
+    private employeeAttendance: EmployeeAttendance
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class DashboardComponent implements OnInit {
       this.allowedEndMin = toMin(to24(cfg.endTime));
 
       // Now set chart with attendance
-      this.setChartData();
+      this.setChartData(data: any);
       this.setChartOptions();
     });
   }
@@ -67,21 +68,47 @@ export class DashboardComponent implements OnInit {
 
   formattedItem(): void {
     this.timeInOutService.getTimeInAndOut(this.userId).subscribe(
-      res => this.formattedItem = res.formattedItem,
+      res => {this.getTotalTime = res.formattedItem;}, 
       err => console.error('Error fetching total time:', err)
     );
   }
 
   getFrequentStatus(): void {
-    this.frequentStatus = 'On Time';
+    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(data => {
+      const statusCounts = data.reduce((acc, curr) => {
+        acc[curr.status] = (acc[curr.status] || 0) + 1;
+        return acc;
+      }, {});
+      this.frequentStatus = Object.entries(statusCounts)
+        .sort((a, b) => b[1] - a[1])[0][0] || 'On Time';
+    });
   }
 
   getLongestStreak(): void {
-    this.longestStreak = '5 days';
+    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(data => {
+      let currentStreak = 0;
+      let maxStreak = 0;
+      
+      data.sort((a, b) => new Date(a.time_in).getTime() - new Date(b.time_in).getTime())
+          .forEach((record, i) => {
+        if (record.status === 'Present') {
+          currentStreak++;
+          maxStreak = Math.max(maxStreak, currentStreak);
+        } else {
+          currentStreak = 0;
+        }
+      });
+      
+      this.longestStreak = `${maxStreak} days`;
+    });
   }
 
-  private getWeeklyAttendanceStats(att: EmployeeAttendance[]): any {
-    const stats: Record<string, { present: number; absent: number }> = {
+  interface WeeklyStats {
+    [key: string]: { present: number; absent: number };
+  }
+
+  private getWeeklyAttendanceStats(att: EmployeeAttendance[]): WeeklyStats {
+    const stats: WeeklyStats = {
       Monday: { present: 0, absent: 0 },
       Tuesday: { present: 0, absent: 0 },
       Wednesday: { present: 0, absent: 0 },
@@ -89,9 +116,9 @@ export class DashboardComponent implements OnInit {
       Friday: { present: 0, absent: 0 },
     };
 
-    att.forEach(record => {
+    att.forEach((record: EmployeeAttendance) => {
       const inTime = record.time_in;
-      const day = new Date(inTime).toLocaleDateString('en-US', { weekday: 'long' });
+      const day = new Date(inTime).toLocaleDateString('en-US', { weekday: 'long' }) as keyof WeeklyStats;
       if (!stats[day]) return;
 
       const minuteOfDay = this.toMinutes((new Date(inTime)).toTimeString().slice(0,5));
@@ -106,8 +133,8 @@ export class DashboardComponent implements OnInit {
   }
 
   private setChartData(): void {
-    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(data => {
-      const stats = this.getWeeklyAttendanceStats(data);
+    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe((data: EmployeeAttendance[]) => {
+      const stats = this.getWeeklyAttendanceStats(data) as WeeklyStats;
       this.basicData = {
         labels: ['Monday','Tuesday','Wednesday','Thursday','Friday'],
         datasets: [
