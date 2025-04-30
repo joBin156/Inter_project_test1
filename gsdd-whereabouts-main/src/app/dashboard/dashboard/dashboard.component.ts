@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { TimeInOutService, AllowedTime } from 'src/service/time-in-out.service';
 import { EmployeeAttendanceService } from 'src/service/employee-attendance.service';
 import { EmployeeAttendance } from 'src/domain/employee-attendance';
-import { TimesheetComponent } from '../timesheet/timesheet.component';
+
+interface WeeklyStats {
+  [key: string]: { present: number; absent: number };
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -11,17 +14,15 @@ import { TimesheetComponent } from '../timesheet/timesheet.component';
   standalone: false,
 })
 export class DashboardComponent implements OnInit {
-  getTotalTime = 'Not configured';
-  frequentStatus = 'Not configured';
-  longestStreak = 'Not configured';
-  userId = '';
-
-  // Allowed time window (in minutes since midnight)
-  private allowedStartMin = 0;
-  private allowedEndMin = 24 * 60;
-
+  getTotalTime: string = 'Not configured';
+  frequentStatus: string = 'Not configured';
+  longestStreak: string = 'Not configured';
+  userId: string = '';
   basicData: any;
   basicOptions: any;
+
+  private allowedStartMin: number = 0;
+  private allowedEndMin: number = 24 * 60;
 
   constructor(
     private timeInOutService: TimeInOutService,
@@ -41,15 +42,10 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadAllowedTimeAndChart(): void {
-    this.timeInOutService.getAllowedTime().subscribe((cfg: AllowedTime) => {
-      const to24 = this.to24;
-      const toMin = this.toMinutes;
-      this.allowedStartMin = toMin(to24(cfg.startTime));
-      this.allowedEndMin = toMin(to24(cfg.endTime));
-
-      // Now set chart with attendance
+      this.allowedStartMin = this.toMinutes(this.to24(cfg.startTime));
+      this.allowedEndMin = this.toMinutes(this.to24(cfg.endTime));
       this.setChartData(data: any);
-      this.setChartOptions();
+      this.setChartOptions(); 
     });
   }
 
@@ -68,7 +64,7 @@ export class DashboardComponent implements OnInit {
 
   formattedItem(): void {
     this.timeInOutService.getTimeInAndOut(this.userId).subscribe(
-      res => {this.getTotalTime = res.formattedItem;}, 
+      res => {this.getTotalTime = res.formattedItem;},
       err => console.error('Error fetching total time:', err)
     );
   }
