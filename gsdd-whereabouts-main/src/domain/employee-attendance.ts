@@ -4,4 +4,5 @@ export interface EmployeeAttendance {
   last_name?: string;
   time_in: Date;
   time_out: Date;
+  status?: string;
 }
