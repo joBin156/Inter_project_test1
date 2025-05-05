@@ -1,8 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectorRef, Component, OnInit, Injector } from '@angular/core';
+import { Observable, interval } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { TabService } from 'src/service/tab.service';
 import { TimeInOutModalService } from 'src/service/time-in-out-modal.service';
-import { TimeInOutService, } from 'src/service/time-in-out.service';
+import { TimeInOutService } from 'src/service/time-in-out.service';
+import { EmployeeAttendanceService } from 'src/service/employee-attendance.service'; // Adjust the path as necessary
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -26,16 +28,26 @@ export class TimeinoutComponent implements OnInit {
   Id = localStorage.getItem('id');
 
   check_time_out: boolean = false;
+  attendanceData: any[] = [];
+  miniAttendanceData: any[] = [];
 
   constructor(
     private tabService: TabService,
     private timeInOutModalService: TimeInOutModalService,
     private timeInOutService: TimeInOutService,
+    private employeeAttendanceService: EmployeeAttendanceService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
-  ) {
-    setInterval(() => {
-      this.CURRENT_TIME_DISPLAY_ONLY = new Date().toLocaleString('en-US', {
+    private injector: Injector,
+  ) {}
+
+  isOpen$ = this.timeInOutModalService.isOpen$;
+
+  ngOnInit(): void {
+    this.timeInOutModalService.closeModal();
+
+    interval(1000).subscribe(() => {
+      this.CURRENT_TIME_DISPLAY_ONLY = this.formatDate(new Date(), {
         year: 'numeric',
         month: 'long',
         day: '2-digit',
@@ -44,38 +56,28 @@ export class TimeinoutComponent implements OnInit {
         second: '2-digit',
         hour12: true,
       });
-      if (!this.timeDisplayModified) {
-        let date = new Date().toLocaleString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: '2-digit',
-        });
 
-        let time = new Date().toLocaleString('en-US', {
+      if (!this.timeDisplayModified) {
+        this.timeDisplay = this.formatDate(new Date(), {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
           hour12: false,
         });
 
-        let hours = new Date().getHours().toString().padStart(2, '0');
-        let minutes = new Date().getMinutes().toString().padStart(2, '0');
-        let seconds = new Date().getSeconds().toString().padStart(2, '0');
-
-        this.timeDisplay = `${hours}:${minutes}:${seconds}`;
-
-        this.currentDate = `${date}`;
+        this.currentDate = this.formatDate(new Date(), {
+          year: 'numeric',
+          month: 'long',
+          day: '2-digit',
+        });
       }
-    }, 1000);
-  }
-
-  isOpen$ = this.timeInOutModalService.isOpen$;
-
-  ngOnInit(): void {
-    this.timeInOutModalService.closeModal();
+      this.cdr.detectChanges();
+    });
 
     this.isTimeIn();
     this.isTimeOut();
+    this.fetchAttendanceData();
+    this.fetchMiniAttendanceData();
   }
 
   openTimeInOutModal() {
@@ -119,7 +121,7 @@ export class TimeinoutComponent implements OnInit {
     this.setTimeIn(this.timeDisplay);
     this.timeInDate = this.currentDate;
 
-    let timeInDateTime = new Date(`${this.timeInDate} ` + this.getTimeIn());
+    let timeInDateTime = new Date(`${this.timeInDate} ${this.getTimeIn()}`);
 
     if (this.Id) {
       this.timeInOutService.timeIn(this.Id, timeInDateTime).subscribe(
@@ -127,7 +129,7 @@ export class TimeinoutComponent implements OnInit {
           this.timeOutId = res.Id;
         },
         (err) => {
-          console.log(err);
+          console.error('Error during time-in:', err);
         },
       );
     } else {
@@ -140,39 +142,25 @@ export class TimeinoutComponent implements OnInit {
     this.setTimeOut(this.timeDisplay);
     this.timeOutDate = this.currentDate;
 
-    let timeOutDateTime = new Date(`${this.timeOutDate} ` + this.getTimeOut());
+    let timeOutDateTime = new Date(`${this.timeOutDate} ${this.getTimeOut()}`);
 
     if (this.getTimeIn() !== '--') {
-
       this.timeInOutService
         .timeOut(this.timeOutId.toString(), timeOutDateTime)
+        .pipe(
+          switchMap(() => this.timeInOutService.getTotalTime(this.timeOutId)),
+          switchMap((res) => this.timeInOutService.setTotalTime(this.timeOutId, res.total_time))
+        )
         .subscribe(
-          (res) => {
+          () => {
             this.check_time_out = true;
           },
           (err) => {
-            console.log(err);
+            console.error('Error during time-out or setting total time:', err);
           },
         );
-
-      this.timeInOutService.getTotalTime(this.timeOutId).subscribe(
-        (res) => {
-          this.timeInOutService
-            .setTotalTime(this.timeOutId, res.total_time)
-            .subscribe(
-              (res_total_time) => {
-              },
-              (err) => {
-                console.log(err);
-              },
-            );
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
     } else {
-      console.error('Invalid Id1');
+      console.error('Invalid Id for time-out');
     }
   }
 
@@ -200,5 +188,35 @@ export class TimeinoutComponent implements OnInit {
 
   goToTimeSheet() {
     this.tabService.changeTab(1);
+  }
+
+  fetchAttendanceData() {
+    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(
+      (data) => {
+        console.log('Fetched attendance data:', data);
+        this.attendanceData = data;
+      },
+      (error) => {
+        console.error('Error fetching attendance data:', error);
+      }
+    );
+  }
+
+  fetchMiniAttendanceData() {
+    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(
+      (data) => {
+        console.log('Fetched attendance data:', data);
+        this.attendanceData = data ?? []; // Fallback to an empty array
+      },
+      (error) => {
+        console.error('Error fetching attendance data:', error);
+        this.attendanceData = []; // Fallback to an empty array in case of error
+      }
+    );
+  }
+  
+
+  private formatDate(date: Date, options: Intl.DateTimeFormatOptions): string {
+    return date.toLocaleString('en-US', options);
   }
 }

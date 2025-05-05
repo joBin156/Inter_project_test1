@@ -3,14 +3,15 @@ import { TimeInOutService } from './time-in-out.service';
 import { environment } from 'src/environments/environment';
 import { firstValueFrom, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class EmployeeAttendanceService {
     private baseUrlAPI = `${environment.apiUrl}`;
 
     constructor(
-        @Inject(EmployeeAttendanceService) 
-        private employeeAttendance: EmployeeAttendanceService,
+        //@Inject(EmployeeAttendanceService) 
+        //private employeeAttendance: EmployeeAttendanceService,
         private http: HttpClient
     ) {}
 
@@ -204,10 +205,12 @@ export class EmployeeAttendanceService {
         return this.http.get<any>(`${this.baseUrlAPI}get_all_data_time_in_out`)
     }
 
-    // getEmployeeAttendanceMini() {
-    //     return Promise.resolve(this.getEmployeeAttendanceData().slice(0, 5));
-    // }
-
+    getEmployeeAttendanceMini() {
+        return this.getEmployeeAttendanceData().pipe(
+            map((data: any[]) => data.slice(0, 5))
+        ).toPromise();
+    }
+    
     getEmployeeAttendance() {
         return Promise.resolve(this.getEmployeeAttendanceData());
     }

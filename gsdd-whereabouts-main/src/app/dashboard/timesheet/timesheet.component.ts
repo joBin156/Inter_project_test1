@@ -44,7 +44,6 @@ export class TimesheetComponent {
             res = res.map((item: any) => {
                 let formattedItem = { ...item };
 
-                // Get Time In Time Only
                 if(formattedItem.time_in != null){
                     let date = new Date(formattedItem.time_in);
                     let hours = date.getHours().toString();
@@ -56,7 +55,6 @@ export class TimesheetComponent {
                     formattedItem.time_in_time_only = `${hours}:${minutes}`;
                 }
 
-                // Get Time Out Time Only
                 if(formattedItem.time_out != null){
                     let date = new Date(formattedItem.time_out);
                     let hours = date.getHours().toString();
@@ -71,7 +69,7 @@ export class TimesheetComponent {
                 if(formattedItem.time_in != null){
                     let date = new Date(formattedItem.time_in);
                     let year = date.getFullYear().toString();
-                    let month = (date.getMonth() + 1).toString(); // Months are 0-based in JavaScript
+                    let month = (date.getMonth() + 1).toString();
                     let day = date.getDate().toString();
                 
                     month = month.length < 2 ? '0' + month : month;

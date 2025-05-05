@@ -19,6 +19,7 @@ export interface AllowedTime {
 })
 export class TimeInOutService {
   private baseUrlAPI = `${environment.apiUrl}`;
+  private apiUrl = 'http://localhost:80/';
 
   constructor(private http: HttpClient) {}
 
@@ -43,13 +44,13 @@ export class TimeInOutService {
   }
 
   getAllowedTime(): Observable<any> {
-    console.log('Making API request to:', `${this.baseUrlAPI}allowed-time`);
-    return this.http.get(`${this.baseUrlAPI}allowed-time`);
+    console.log('Making API request to:', `${this.apiUrl}allowed-time`);
+    return this.http.get(`${this.apiUrl}allowed-time`);
   }
 
   setAllowedTime(AllowedTime: string): Observable<any> {
     //const payload = { allowed_Time; AllowedTime };
-    return this.http.put(`${this.baseUrlAPI}allowed-time/${AllowedTime}`, {})
+    return this.http.put(`${this.apiUrl}allowed-time/${AllowedTime}`, {})
   }
 
   isTimeIn(user_Id: string | null): Observable<any> {

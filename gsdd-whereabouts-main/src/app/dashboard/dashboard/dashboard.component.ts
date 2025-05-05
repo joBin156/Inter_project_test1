@@ -6,24 +6,25 @@ import * as XLSX from 'xlsx';
 import { forkJoin } from 'rxjs';
 
 interface WeeklyStats {
-  [key: string]: { present: number; absent: number };
+  labels: string[];
+  present: number[];
+  absent: number[];
 }
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-  standalone: false,
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   getTotalTime: string = 'Not configured';
   frequentStatus: string = 'Not configured';
   longestStreak: string = 'Not configured';
   userId: string = '';
-  basicData: { labels: string[]; datasets: { label: string; data: number[] }[] } | undefined;
-  basicOptions: { responsive: boolean; plugins: any } | undefined;
-  allowedStartMin: number = 0;
-  allowedEndMin: number = 24 * 60;
+  basicData?: { labels: string[]; datasets: { label: string; data: number[]; backgroundColor: string }[] };
+  basicOptions: any;
+  allowedStartMin = 0;
+  allowedEndMin = 24 * 60;
 
   constructor(
     private timeInOutService: TimeInOutService,
@@ -36,17 +37,54 @@ export class DashboardComponent implements OnInit {
       this.userId = storedId;
       forkJoin([
         this.employeeAttendanceService.getEmployeeAttendanceData(),
-        this.timeInOutService.getTimeInAndOut(this.userId),
+        this.timeInOutService.getTimeInAndOut(this.userId)
       ]).subscribe(([attendanceData, timeInOutData]) => {
-        //this.getFrequentStatus(attendanceData as EmployeeAttendance[]);
+        this.calculateTotalTime(timeInOutData);
+        this.getFrequentStatus(attendanceData as EmployeeAttendance[]);
         this.getLongestStreak(attendanceData as EmployeeAttendance[]);
         this.loadAllowedTimeAndChart();
       });
     }
   }
 
+  private calculateTotalTime(timeInOutData: any): void {
+    this.getTotalTime = timeInOutData?.totalTime || '0h 0m';
+  }
+
+  private getFrequentStatus(data: EmployeeAttendance[]): void {
+    const statusCounts: Record<string, number> = {};
+    data.forEach(record => {
+      const status = record.status || 'Unknown';
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+    });
+    this.frequentStatus = Object.entries(statusCounts)
+      .sort((a, b) => b[1] - a[1])[0]?.[0] || 'On Time';
+  }
+
+  private getLongestStreak(data: EmployeeAttendance[]): void {
+    let currentStreak = 0;
+    let maxStreak = 0;
+    let lastDate: string | null = null;
+
+    data
+      .map(r => new Date(r.time_in))
+      .sort((a, b) => a.getTime() - b.getTime())
+      .forEach(date => {
+        const dayString = date.toDateString();
+        if (lastDate && new Date(lastDate).getTime() + 86400000 === date.getTime()) {
+          currentStreak++;
+        } else {
+          currentStreak = 1;
+        }
+        maxStreak = Math.max(maxStreak, currentStreak);
+        lastDate = dayString;
+      });
+
+    this.longestStreak = `${maxStreak} days`;
+  }
+
   private loadAllowedTimeAndChart(): void {
-    this.timeInOutService.getAllowedTime().subscribe((cfg) => {
+    this.timeInOutService.getAllowedTime().subscribe(cfg => {
       this.allowedStartMin = this.toMinutes(this.to24(cfg.startTime));
       this.allowedEndMin = this.toMinutes(this.to24(cfg.endTime));
       this.loadChartData();
@@ -54,112 +92,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  private to24(input: string): string {
-    const [time, mod] = input.split(' ');
-    let [h, m] = time.split(':').map((v) => parseInt(v, 10));
-    if (mod === 'PM' && h < 12) h += 12;
-    if (mod === 'AM' && h === 12) h = 0;
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-  }
-
-  private toMinutes(input24: string): number {
-    const [h, m] = input24.split(':').map((v) => Number(v));
-    return h * 60 + m;
-  }
-
-  getFrequentStatus(): void {
-    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(data => {
-      const statusCounts: { [key: string]: number } = {};
-  
-      data.forEach((record: EmployeeAttendance) => {
-        const status = record.status || 'Unknown'; // Handle undefined status
-        statusCounts[status] = (statusCounts[status] || 0) + 1;
-      });
-  
-      this.frequentStatus = Object.entries(statusCounts)
-        .sort((a, b) => b[1] - a[1])[0]?.[0] || 'On Time'; // Default to 'On Time'
-    });
-  }
-  
-  getLongestStreak(attendanceData: EmployeeAttendance[]): void {
-    let currentStreak = 0;
-    let maxStreak = 0;
-
-    attendanceData
-      .filter((record) => record.time_in)
-      .sort(
-        (a, b) =>
-          new Date(a.time_in).getTime() - new Date(b.time_in).getTime()
-      )
-      .forEach((record) => {
-        if (record.status === 'Present') {
-          currentStreak++;
-          maxStreak = Math.max(maxStreak, currentStreak);
-        } else {
-          currentStreak = 0;
-        }
-      });
-
-    this.longestStreak = `${maxStreak} days`;
-  }
-
-  private getWeeklyAttendanceStats(
-    attendance: EmployeeAttendance[]
-  ): WeeklyStats {
-    const stats: Record<string, { present: number; absent: number }> = {
-      Monday: { present: 0, absent: 0 },
-      Tuesday: { present: 0, absent: 0 },
-      Wednesday: { present: 0, absent: 0 },
-      Thursday: { present: 0, absent: 0 },
-      Friday: { present: 0, absent: 0 },
-    };
-
-    attendance.forEach((record) => {
-      const inTime = record.time_in;
-      const day = new Date(inTime).toLocaleDateString('en-US', { weekday: 'long' });
-      if (!stats[day]) return;
-
-      const minuteOfDay = this.toMinutes(new Date(inTime).toTimeString().slice(0, 5));
-      if (minuteOfDay >= this.allowedStartMin && minuteOfDay <= this.allowedEndMin) {
-        stats[day].present++;
-      } else {
-        stats[day].absent++;
-      }
-    });
-    return stats;
-  }
-
   private loadChartData(): void {
     this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(
       (data: EmployeeAttendance[]) => {
         const stats = this.getWeeklyAttendanceStats(data);
         this.basicData = {
-          labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+          labels: stats.labels,
           datasets: [
-            {
-              label: 'Present',
-              data: [
-                stats['Monday'].present,
-                stats['Tuesday'].present,
-                stats['Wednesday'].present,
-                stats['Thursday'].present,
-                stats['Friday'].present,
-              ],
-            },
-            {
-              label: 'Absent',
-              data: [
-                stats['Monday'].absent,
-                stats['Tuesday'].absent,
-                stats['Wednesday'].absent,
-                stats['Thursday'].absent,
-                stats['Friday'].absent,
-              ],
-            },
-          ],
+            { label: 'Present', data: stats.present, backgroundColor: '#42A5F5' },
+            { label: 'Absent', data: stats.absent, backgroundColor: '#FFA726' }
+          ]
         };
+        console.log('Chart Data:', this.basicData);
       },
-      (err) => console.error('Error loading chart data:', err)
+      err => console.error('Error loading chart data:', err)
     );
   }
 
@@ -168,15 +114,60 @@ export class DashboardComponent implements OnInit {
       responsive: true,
       plugins: {
         legend: { position: 'bottom' },
-        title: { display: true, text: 'Attendance Chart' },
-      },
+        title: { display: true, text: 'Weekly Attendance' }
+      }
     };
   }
 
+  private getWeeklyAttendanceStats(data: EmployeeAttendance[]): WeeklyStats {
+    const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const present = [0, 0, 0, 0, 0];
+    const absent = [0, 0, 0, 0, 0];
+
+    data.forEach(record => {
+      const date = new Date(record.time_in);
+      const day = date.toLocaleDateString('en-US', { weekday: 'long' });
+      const idx = labels.indexOf(day);
+      if (idx === -1) return;
+      const minute = date.getHours() * 60 + date.getMinutes();
+      if (minute >= this.allowedStartMin && minute <= this.allowedEndMin) {
+        present[idx]++;
+      } else {
+        absent[idx]++;
+      }
+    });
+
+    return { labels, present, absent };
+  }
+
   generateExcelTimesheet(): void {
-    const ws = XLSX.utils.json_to_sheet(this.basicData?.datasets || []);
+    const basicData = this.basicData;
+    if (!basicData) {
+      console.warn('No chart data to export');
+      return;
+    }
+    const rows = basicData.labels.map((day, i) => ({
+      Day: day,
+      Present: basicData.datasets[0].data[i],
+      Absent: basicData.datasets[1].data[i]
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Attendance');
-    XLSX.writeFile(wb, 'Attendance_Timesheet.xlsx');
+    XLSX.writeFile(wb, 'WeeklyAttendance.xlsx');
+  }
+
+  private to24(input: string): string {
+    const [time, mod] = input.split(' ');
+    let [h, m] = time.split(':').map(v => parseInt(v, 10));
+    if (mod === 'PM' && h < 12) h += 12;
+    if (mod === 'AM' && h === 12) h = 0;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+  }
+
+  private toMinutes(input24: string): number {
+    const [h, m] = input24.split(':').map(Number);
+    return h * 60 + m;
   }
 }
