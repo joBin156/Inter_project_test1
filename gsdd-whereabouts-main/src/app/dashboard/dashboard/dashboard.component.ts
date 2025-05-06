@@ -94,17 +94,27 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadChartData(): void {
+    if (!this.userId) return;
+
     this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(
       (data: EmployeeAttendance[]) => {
-        const stats = this.getWeeklyAttendanceStats(data);
+        const userRecords = data.filter(record => record.employee_id === this.userId);
+        const stats = this.getWeeklyAttendanceStats(userRecords);
         this.basicData = {
           labels: stats.labels,
           datasets: [
-            { label: 'Present', data: stats.present, backgroundColor: '#42A5F5' },
-            { label: 'Absent', data: stats.absent, backgroundColor: '#FFA726' }
+            {
+              label: 'Present',
+              data: stats.present,
+              backgroundColor: '#42A5F5'
+            },
+            {
+              label: 'Absent',
+              data: stats.absent,
+              backgroundColor: '#FFA726'
+            }
           ]
         };
-        console.log('Chart Data:', this.basicData);
       },
       err => console.error('Error loading chart data:', err)
     );

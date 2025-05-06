@@ -7,7 +7,6 @@ const app = express();
 
 app.post("/time_in", async (req, res) => {
   const { user_Id, time_in } = req.body;
-
   if (!user_Id) {
     return res.status(400).json({ error: "No User ID" });
   }

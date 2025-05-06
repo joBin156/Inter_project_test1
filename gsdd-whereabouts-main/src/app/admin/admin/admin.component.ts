@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { EmployeeAttendanceService } from 'src/service/employee-attendance.service';
 
@@ -20,14 +21,17 @@ export class AdminComponent implements OnInit {
   sickLeaveCount = 0;
   basicData: any;
 
-  constructor(private employeeAttendanceService: EmployeeAttendanceService) {
-    this.initChartData();
-  }
+  basicOptions: any;
+
+  constructor(private employeeAttendanceService: EmployeeAttendanceService) {}
 
   ngOnInit() {
     this.loadDashboardStats();
-  }
+    this.initChartOptions();
+    this.loadChartData();
 
+  }
+  
   private loadDashboardStats() {
     this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(data => {
       const today = new Date().toISOString().split('T')[0];
@@ -41,50 +45,65 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  private initChartData() {
-    this.basicData = {
-      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      datasets: [
-        {
-          label: 'Present',
-          backgroundColor: '#42A5F5',
-          data: [5, 10, 18, 16, 13],
-        },
-        {
-          label: 'Absent',
-          backgroundColor: '#9CCC65',
-          data: [6, 14, 21, 12, 7],
-        },
-      ],
-    };
+  private loadChartData() {
+    this.employeeAttendanceService.getEmployeeAttendanceData().subscribe(data => {
+      const weekData = this.processWeeklyData(data);
+      this.basicData = {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        datasets: [
+          {
+            label: 'Present',
+            backgroundColor: '#42A5F5',
+            data: weekData.present
+          },
+          {
+            label: 'Absent',
+            backgroundColor: '#FFA726',
+            data: weekData.absent
+          }
+        ]
+      };
+    });
   }
 
-  private initChart() {
-    this.basicData = {
-      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      datasets: [
-        {
-          label: 'Present',
-          backgroundColor: '#42A5F5',
-          data: [5, 10, 18, 16, 13],
-        },
-        {
-          label: 'Absent', 
-          backgroundColor: '#9CCC65',
-          data: [6, 14, 21, 12, 7],
-        },
-      ],
-    };
+  private processWeeklyData(data: any[]) {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const present = new Array(5).fill(0);
+    const absent = new Array(5).fill(0);
+
+    data.forEach(record => {
+      const date = new Date(record.time_in);
+      const dayIndex = date.getDay() - 1; // Monday is 1
+      if (dayIndex >= 0 && dayIndex < 5) {
+        if (record.status === 'Present') {
+          present[dayIndex]++;
+        } else {
+          absent[dayIndex]++;
+        }
+      }
+    });
+
+    return { present, absent };
   }
 
-  basicOptions = {
-    title: {
-      display: true,
-      text: 'My Title',
-      fontSize: 16,
-    },
-    legend: {
-      position: 'bottom',
-    },
-  };
+  private initChartOptions() {
+    this.basicOptions = {
+      plugins: {
+        legend: {
+          position: 'bottom'
+        },
+        title: {
+          display: true,
+          text: 'Weekly Attendance Overview',
+          fontSize: 16
+        }
+      },
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    };
+  }
 }
